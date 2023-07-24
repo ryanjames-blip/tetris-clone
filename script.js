@@ -2,35 +2,51 @@
 const canvas = document.getElementById('canvas1');
 const ctx = canvas.getContext('2d');
 
-canvas.width = 500;
-canvas.height = 800;
-
-let score = 0;
-let gameFrame = 0;
-
-// Arrow keys
-addEventListener('keydown', moveBlock);
+canvas.width = 420;
+canvas.height = 560;
+console.log(ctx);
+ctx.fillStyle = 'red';
 
 // Blocks
 class Block {
-    constructor() {
-        this.x = canvas.width / 2;
-        this.y = canvas.height / 2;
-        this.radius = 50;
-        this.angle = 0;
-        this.frameX = 0;
-        this.frameY = 0;
-        this.spriteWidth = 498;
-        this.spriteHeight = 327;
+    constructor(context) {
+        //this.context = context;
+        this.width = 60;
+        this.height = 60;
+        this.x = canvas.width / 2 - this.width / 2;
+        this.y = this.height / 2;
+        this.speedX = 0;
+        this.speedY = 1;
+        this.init(context);
+    }
+    init(context) {
+        //spawn a rectangle at the top of the canvas
+        context.fillRect(this.x, this.y, this.width, this.height);
     }
     update() {
-        
+        this.x += this.speedX;
+        this.y += this.speedY;
+        if (this.y + this.height == canvas.height) {
+            this.speedY = 0;
+        }
+    }
+    draw(context) {
+        context.fillRect(this.x, this.y, this.width, this.height);
     }
 }
 
-function moveBlock(event) {
-    console.log(event.code);
+class Game {
+
 }
 
-// Animation loop
+const block = new Block(ctx);
 
+// Animation loop
+function animate() {
+    ctx.clearRect(0, 0, canvas.width, canvas.height);
+    block.update();
+    block.draw(ctx);
+    requestAnimationFrame(animate);
+}
+
+animate();
